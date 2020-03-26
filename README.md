@@ -1,5 +1,22 @@
 # cloud
 
+## cloud data platform
+* data lake: _A data lake is a storage repository that holds a vast amount of raw data in its native format until it is needed._
+* a data platform has the following layers:
+    * ingest
+    * storage
+    * processing
+    * serving
+* book source: Designing Cloud Data Platforms, Manning
+
+__processing layer__
+* here comes data processing framework in use: apache spark, bean, flink
+* with these framework you can: transform, validate, clean data
+
+__serving layer__
+* aim is to provide the data to end user
+
+
 ## kubernetes, k8s
 * _automating deployment, scaling, and management of containerized applications._
 * use https://microk8s.io/ on laptop

@@ -1,5 +1,26 @@
 # cloud
 
+## AWS and Computer Vision
+
+__GluonCV__
+* GluonCV (runs on apache mxnet engine): a deep learning toolkit for computer vision
+    * image classification
+    * object detection
+    * semantic / instance segmentation
+    * pose estimation
+* created and maintained by AWS
+* Java, Maven, Linux, CPU: 
+    * https://mxnet.apache.org/get_started/java_setup.html
+    * https://gluon-cv.mxnet.io/install.html
+
+__computer vision tasks:__
+* object detection models - with YOLO (Real-Time Object Detection)
+* semantic / instance segmentation
+* pose estimation
+
+__more__
+* cloudera: AWS Computer Vision: Getting Started with GluonCV
+
 ## cloud data platform
 * data lake: _A data lake is a storage repository that holds a vast amount of raw data in its native format until it is needed._
 * a data platform has the following layers:

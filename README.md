@@ -6,35 +6,96 @@
 * IoT devices in 2030: ~125 billion
 * collect data from physical world (information offline) with devices.
 
-__market sectors__
+### market sectors
 
 * Smart cities - a city that uses technology to improve efficiency, sustainability, and quality of life for people living and working in the city. 
 * Industrial IoT - generate value from sensor data. With machine learning and big data
 * Connected health - using consumer technologies to connect patients and healthcare providers outside of the hospital. 
 * Smart homes - using smart devices to control the environment in a home.
 
-__IoT network__
-* _device_: interacts with the environment
+### IoT network
+
+* __device__: interacts with the environment
     * converts information from the physical world in digital data
-* _gateway_: gather the data (from device) and communicate with cloud
+    * real world data is collected using __sensors__
+* __gateway__: gather the data (from device) and communicate with cloud
     * can be a cell phone, microprocessor platform, personal assistant (alexa, google home, ...)
     * does real-time analytics or machine learning (= __edge computing__)
-* _cloud_: store, process, analyze data
+* __cloud__: store, process, analyze data
 
-__Machine Learning on the edge__
+### Machine Learning on the edge
+
 * run machine learning on device with tensorflow and TPU board
-* _predictive maintainance_: predict downtime, detect anomalies, track device status, state, location
+* __predictive maintainance__: predict downtime, detect anomalies, track device status, state, location
 
-IoT Architecture
-IoT Vocabulary
+### Challenges
+
+* IoT network need throughput. there is no room for bottlenecks between information exchange. data analysis, machine learning and data gathering is done on devices.
+* legacy infrastructures need to integrate new technologies
+* security: each node is a potential opening for hacking
+* dealing with different protocols
+
+### IoT Architecure / Network
+
+* Google's IoT architecture has four stages: data gathering, data ingest, data processing, and data analysis.
+* on __data gathering__ stage, edge device gets data from environment and do realtime analitics and ML. _before_ the data is sent to cloud. Doing ML on the edge decreases latency
+* __ingest__: with pup/sub data is uploaded to cloud
+* __processing__: cleaning, transformation, storing of data
+* __analysis__: gain insights, bring ML to production with ai platform
+
+### Security
+
+* devices needs to securely connected to the IoT Network
+* Google Cloud IoT do the authentication to the cloud, authorization to pub/sub
+
+### data types
+
+* sending temperatures is called telemetry. this is read-only
+* there is also a second type device state
+* you can also send commands from the cloud the control the device. e.g. stop sending data.
+
+### protocol
+
+* choose HTML, MQTT or both
+* MQTT is an industry-standard IoT protocol
+* _MQTT is considered to be data focused, while HTTP is document focused. Which means MQTT is better suited to the rigors of IoT._
+
+### pub/sub service
+
+* called Cloud pup/sub
+* decopling publisher and subscriber
+* topics hold messages. a subscription take receives messages from a topic. publisher send messages to a topic
+
+### Cloud IoT Core
+
+* ingest stage
+* uses MQTT protocol with single global endpoint: `mqtt.googleapis.com`
+* you create a device registry, add a topic to it and add devices to this 
+
+### Cloud Storage
+
+* a unified object storage
+* store and retrieve data from any where in the world
+* data is stored in a _bucket_. a bucket is defined by:
+    * __globally-unique__ name
+    * a __geographic location__ where the bucket is stored
+    * storage classes: Multi-Regional, Regional, Nearline, and Coldline.
+
+### Dataflow
+* _for transforming and enriching data in stream (real time) or batch (historical) modes._
+* _Dataflow pipelines are either batch (processing bounded input like a file or database table) or streaming (processing unbounded input from a source like Cloud Pub/Sub)_
+* pipelines can be creates also with Apache Beam SDK
+    * Apache Kafka, Avro
 
 __sources__
+
 * coursera: Industrial IoT on Google Cloud Platform
 * https://cdn.ihs.com/www/pdf/IoT_ebook.pdf
 * https://www.youtube.com/watch?v=51bq_Yhuof4 - Google Cloud IoT Solutions
 * https://www.youtube.com/watch?v=WAp6FHbhYCk - AWS IoT Services
 * https://medium.com/@aallan/hands-on-with-the-coral-usb-accelerator-a37fcb323553 - USB Accelerator, Edge TPU
 * https://cloud.google.com/edge-tpu
+* https://cloud.google.com/ai-platform - analysis stage: bring ML to production
 
 ## AWS and Computer Vision
 

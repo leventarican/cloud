@@ -95,6 +95,26 @@
 * Cloud Dataflow (Dataprep Flow, 3rd party: Trifacta)
 * Data Studio (not Google Cloud)
 
+### Summary
+
+__ingest__
+
+* IoT Core: create a device registry, add a device
+    * use a MQTT Application which simulate the data
+* Cloud Pub/Sub: create a topic and add a subscription
+
+__process__
+
+* Cloud Dataflow: create a pipeline to transfer data to storage or bigquery
+* Cloud Storage: stream data to bucket
+
+__analyze__
+
+* Cloud BigQuery: create dataset and table
+* Cloud Dataprep: manipulate the data
+* Data Studio: create a report
+* Cloud ML
+
 ### Sources
 
 * coursera: Industrial IoT on Google Cloud Platform

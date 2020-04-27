@@ -1,5 +1,16 @@
 # cloud
 
+## Serverless
+
+* if you manage (configure) instances then its not serverless
+* serverless is the discipline to abstract the server
+* _The term “Serverless” is confusing since with such applications there are both server hardware and server processes running somewhere_
+
+### Links
+
+* https://martinfowler.com/articles/serverless.html#WhatIsServerless
+* https://docs.microsoft.com/en-us/azure/app-service/app-service-web-get-started-java#deploy-the-app - java, maven, azure app service
+
 ## Google Cloud - IoT
 
 * Term _Internet of Things_ was created 1999
@@ -48,19 +59,19 @@
 * devices needs to securely connected to the IoT Network
 * Google Cloud IoT do the authentication to the cloud, authorization to pub/sub
 
-### data types
+### Data types
 
 * sending temperatures is called telemetry. this is read-only
 * there is also a second type device state
 * you can also send commands from the cloud the control the device. e.g. stop sending data.
 
-### protocol
+### Protocol
 
 * choose HTML, MQTT or both
 * MQTT is an industry-standard IoT protocol
 * _MQTT is considered to be data focused, while HTTP is document focused. Which means MQTT is better suited to the rigors of IoT._
 
-### pub/sub service
+### Pub/Sub service
 
 * called Cloud pup/sub
 * decopling publisher and subscriber
@@ -94,6 +105,12 @@
 * Cloud BigQuery
 * Cloud Dataflow (Dataprep Flow, 3rd party: Trifacta)
 * Data Studio (not Google Cloud)
+
+## k8s, docker
+1. build container
+2. push to container registry
+3. kubernetes engine
+4. run container
 
 ### Summary
 
@@ -203,11 +220,3 @@ storage: disabled
 * https://github.com/ubuntu/microk8s
 * https://microk8s.io/docs/
 * https://microk8s.io/#get-started
-
-## google cloud platform
-* k8s, docker
-
-1. build container
-2. push to container registry
-3. kubernetes engine
-4. run container

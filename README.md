@@ -87,7 +87,15 @@
 * pipelines can be creates also with Apache Beam SDK
     * Apache Kafka, Avro
 
-__sources__
+### Google Cloud Platform (GCP)
+* Cloud IoT Core
+* Cloud Pub/Sub
+* Cloud Storage
+* Cloud BigQuery
+* Cloud Dataflow (Dataprep Flow, 3rd party: Trifacta)
+* Data Studio (not Google Cloud)
+
+### Sources
 
 * coursera: Industrial IoT on Google Cloud Platform
 * https://cdn.ihs.com/www/pdf/IoT_ebook.pdf
@@ -96,6 +104,9 @@ __sources__
 * https://medium.com/@aallan/hands-on-with-the-coral-usb-accelerator-a37fcb323553 - USB Accelerator, Edge TPU
 * https://cloud.google.com/edge-tpu
 * https://cloud.google.com/ai-platform - analysis stage: bring ML to production
+* https://datastudio.google.com/ - Data Studio, based on Google Drive
+* https://github.com/GoogleCloudPlatform/training-data-analyst.git - simulating device
+* https://github.com/cagamboa123/training-data-analyst.git  - simulating device
 
 ## AWS and Computer Vision
 

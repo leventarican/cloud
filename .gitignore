@@ -1,0 +1,6 @@
+gluoncv/bin
+gluoncv/include
+gluoncv/lib
+gluoncv/lib64
+gluoncv/share
+gluoncv/pyvenv.cfg

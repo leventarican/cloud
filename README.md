@@ -1,5 +1,31 @@
 # cloud
 
+## GluonCV
+
+### create virtual environment: only once
+``` 
+python3 -m venv gluoncv
+``` 
+
+### activate virtual environment
+``` 
+cd gluoncv
+source bin/activate
+``` 
+
+### deactivate virtual environment
+``` 
+deactivate
+``` 
+
+### install mxnet
+``` 
+``` 
+
+### install gluoncv
+``` 
+``` 
+
 ## Serverless
 
 * if you manage (configure) instances then its not serverless

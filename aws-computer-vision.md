@@ -64,3 +64,19 @@ __sources__
     * Amazon Elastic Kubernetes Services: Amazon EKS
     * EC2 with DLAMI: connect to instance (with SSH) then docker run
     * on your own machine: Docker and Amazon CLI has to be installed
+
+## GluonCV
+* GluonCV implements models for image classifications. 
+* these models are accessible in __model zoo__.
+* these models are pre-trained on public available dataset with millions of images.
+
+### image classification dataset
+* __CIFAR-10__ (Canadian Institute for Advanced Research) used over 10 years for computer research. it includes 10 basic classes: cars, cats, dogs, ...
+* __ImageNet__ is another images classification dataset. with 14 mio images and 22.000 classes. refered as ImageNet22k. check also Imagenet1k.
+
+### neuronal network models for image classification
+* there are a lot of different models architectures (classification model architectures)
+* __ResNet__ is popular
+* __MobileNet__ is good for mobile phones
+* or: VGG, SqueezeNet, DenseNet, AlexNet, DarkNet, Inception, ...
+* how to decide which model to take? accurary, samples per seconds, ...

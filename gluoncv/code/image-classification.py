@@ -65,12 +65,13 @@ print('maximum value: ', image.max().asscalar())
 network = gcv.model_zoo.get_model('ResNet50_v1d', pretrained=True)
 # or: network = gcv.model_zoo.resnet50_v1d(pretrained=true)
 # resnet50 is a pre-trained model on imagenet (= image classification dataset)
-# INFO - on first call the NN model parameters are downloaded to: ~/.mxnet/models/resnet50_v1d-117a384e.zip
+# INFO - on first call the NN model parameters are downloaded to: ~/.mxnet/models/resnet50_v1d-*.zip
 # afterwords its directly loaded from the cache.
 
 # make prediction
 ################################################################################
 # we provide the network our image
+# the prediction is a MXNet ndarray
 prediction = network(image)
 print(prediction.shape)
 

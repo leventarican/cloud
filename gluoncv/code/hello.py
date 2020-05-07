@@ -1,4 +1,5 @@
 import mxnet 
 import gluoncv 
 
-print('maxnet - gluoncv')
+# import mxnet for cpu. there are also other packages: gpu, cuda
+print('mxnet - gluoncv')

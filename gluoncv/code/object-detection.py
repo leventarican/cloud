@@ -149,5 +149,10 @@ print(bounding_boxes[:k])
 # visualize prediction
 ################################################################################
 # we can use the GluonCV bounding box plot function
+
+# the following objects are detected: dog, bike, car
+
+# the network missed the tree. why? because the model is pre-trained on coco.
+# coco doesnt have an object class for tree.
 gcv.utils.viz.plot_bbox(chw_image, bounding_boxes, probabilities, class_indicies, class_names=network.classes)
 plt.show()

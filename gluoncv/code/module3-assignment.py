@@ -9,7 +9,7 @@
 # 
 # We start with some initial setup: importing packages and setting the path to the data.
 
-# In[ ]:
+# In[6]:
 
 
 import mxnet as mx
@@ -20,7 +20,7 @@ import os
 from pathlib import Path
 
 
-# In[ ]:
+# In[7]:
 
 
 M3_DATA = Path(os.getenv('DATA_DIR', '../../data'), 'module_3')
@@ -34,7 +34,7 @@ M3_MODELS = Path(M3_DATA, 'models')
 # 
 # It should return an 8-bit image array, that's in MXNet's NDArray format and in HWC layout (i.e. height, width then channel).
 
-# In[ ]:
+# In[8]:
 
 
 def load_image(filepath):
@@ -48,10 +48,12 @@ def load_image(filepath):
     :rtype: mx.nd.NDArray
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    image = mx.image.imread(filepath)
+    return image
 
 
-# In[ ]:
+# In[9]:
 
 
 test_filepath = Path(M3_IMAGES, 'ben-hershey-VEW78A1YZ6I-unsplash.jpg')
@@ -59,6 +61,12 @@ test_output = load_image(test_filepath)
 assert test_output.shape[2] == 3  # RGB
 assert test_output.dtype == np.uint8  # 0 - 255
 assert isinstance(test_output, mx.nd.NDArray)  # MXNet NDArray, not NumPy Array.
+
+
+# In[10]:
+
+
+print('debug')
 
 
 # ### 2) Transforming an image
@@ -69,7 +77,7 @@ assert isinstance(test_output, mx.nd.NDArray)  # MXNet NDArray, not NumPy Array.
 # 
 # See the docstring for more details, but don't forget that GluonCV contains a number of utilities and helper functions to make your life easier! Check out the preset transforms.
 
-# In[ ]:
+# In[16]:
 
 
 def transform_image(array):
@@ -89,10 +97,12 @@ def transform_image(array):
     :rtype: mx.nd.NDArray
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    #raise NotImplementedError()
+    image = gcv.data.transforms.presets.imagenet.transform_eval(array)
+    return image
 
 
-# In[ ]:
+# In[17]:
 
 
 transformed_test_output = transform_image(test_output)
@@ -108,7 +118,7 @@ assert transformed_test_output.dtype == np.float32
 # 
 # <font color='red'>**CAUTION!**</font>: Although the notebook interface has internet connectivity, the **autograders are not permitted to access the internet**. We have already downloaded the correct models and data for you to use so you don't need access to the internet. However, you do need to specify the correct path to the models when loading a model from the Gluon CV Model Zoo using `get_model` or otherwise. Set the `root` parameter to `M3_MODELS`. As an example, you should have something similar to `gcv.model_zoo.get_model(..., root=M3_MODELS)`. Usually, in the real world, you have internet access, so setting the `root` parameter isn't required (and it's set to `~/.mxnet` by default).
 
-# In[ ]:
+# In[20]:
 
 
 def load_pretrained_classification_network():
@@ -119,10 +129,12 @@ def load_pretrained_classification_network():
     :rtype: mx.gluon.Block
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    network = gcv.model_zoo.get_model('mobilenet1.0', pretrained=True, root=M3_MODELS)
+    return network
 
 
-# In[ ]:
+# In[21]:
 
 
 network = load_pretrained_classification_network()
@@ -142,7 +154,7 @@ assert list(params.items())[0][1].shape[0] == 32, 'Select MobileNet1.0'
 # 
 # **Hint #2**: Remember that the direct outputs of our network aren't probabilities.
 
-# In[ ]:
+# In[24]:
 
 
 def predict_probabilities(network, data):
@@ -158,10 +170,17 @@ def predict_probabilities(network, data):
     :rtype: mx.nd.NDArray
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    #raise NotImplementedError()
+    prediction = network(data)
+    print(prediction)
+    prediction = prediction[0]
+    probability = mx.nd.softmax(prediction)
+    rounded_probability = mx.nd.round(probability*100)/100
+    print(rounded_probability[970:])
+    return rounded_probability
 
 
-# In[ ]:
+# In[25]:
 
 
 pred_probas = predict_probabilities(network, transformed_test_output)
@@ -178,7 +197,7 @@ assert pred_probas.dtype == np.float32
 # 
 # **Hint**: you're allowed to use variables that are defined globally on this occasion. You should think about which objects that have been previously defined has a list of class labels.
 
-# In[ ]:
+# In[28]:
 
 
 def find_class_idx(label):
@@ -192,10 +211,13 @@ def find_class_idx(label):
     :rtype: int
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    for i in range(1000):
+        class_label = network.classes[i]
+        if class_label == label:
+            return i
 
 
-# In[ ]:
+# In[29]:
 
 
 assert find_class_idx('tennis ball') == 852
@@ -209,7 +231,7 @@ assert find_class_idx('admiral') == 321
 # 
 # We'll use this for our confidence score that the image is a tennis ball.
 
-# In[ ]:
+# In[100]:
 
 
 def slice_tennis_ball_class(pred_probas):
@@ -224,10 +246,14 @@ def slice_tennis_ball_class(pred_probas):
     
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    print(type(pred_probas))
+    class_probability = pred_probas[852]
+    class_probability = np.float32(class_probability.asscalar())
+    print(type(class_probability))
+    return class_probability
 
 
-# In[ ]:
+# In[101]:
 
 
 pred_proba_tennis_ball = slice_tennis_ball_class(pred_probas)
@@ -239,7 +265,7 @@ np.testing.assert_almost_equal(pred_proba_tennis_ball, 0.9987876, decimal=3)
 # 
 # We'll finish this assignment by bringing all of the components together and creating a `TennisBallClassifier` to classify images. You should implement the entire classification pipeline inside the `classify` function using the functions defined earlier on in the assignment. You should notice that the pre-trained model is loaded once during initialization, and then it should be used inside the `classify` method.
 
-# In[ ]:
+# In[108]:
 
 
 class TennisBallClassifier():
@@ -248,10 +274,16 @@ class TennisBallClassifier():
         
     def classify(self, filepath):
         # YOUR CODE HERE
-        raise NotImplementedError()
+        image = load_image(filepath)
+        transformed_image = transform_image(image)
+        
         self._visualize(transformed_image)
+        
         # YOUR CODE HERE
-        raise NotImplementedError()
+        network = load_pretrained_classification_network()
+        pred_probas = predict_probabilities(network, transformed_image)
+        pred_proba = slice_tennis_ball_class(pred_probas)
+        
         print('{0:.2%} confidence that image is a tennis ball.'.format(pred_proba))
         return pred_proba
     
@@ -266,13 +298,13 @@ class TennisBallClassifier():
         plt.imshow(chw_image.asnumpy())
 
 
-# In[ ]:
+# In[109]:
 
 
 classifier = TennisBallClassifier()
 
 
-# In[ ]:
+# In[111]:
 
 
 filepath = Path(M3_IMAGES, 'erik-mclean-D23_XPbsx-8-unsplash.jpg')
@@ -280,10 +312,9 @@ pred_proba = classifier.classify(filepath)
 np.testing.assert_almost_equal(pred_proba, 2.0355723e-05, decimal=3)
 
 
-# In[ ]:
+# In[112]:
 
 
 filepath = Path(M3_IMAGES, 'marvin-ronsdorf-CA998Anw2Lg-unsplash.jpg')
 pred_proba = classifier.classify(filepath)
 np.testing.assert_almost_equal(pred_proba, 0.9988895, decimal=3)
-

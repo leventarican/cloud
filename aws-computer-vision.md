@@ -80,3 +80,38 @@ __sources__
 * __MobileNet__ is good for mobile phones
 * or: VGG, SqueezeNet, DenseNet, AlexNet, DarkNet, Inception, ...
 * how to decide which model to take? accurary, samples per seconds, ...
+
+## neuronal network essentials
+* module 3 > lesson 5
+* a fundamental network is called the __fully connected network__
+* is called fully connected because all inputs are connected to outputs
+* its a general purpose network that makes no assumption about the input data
+* ex. image. an image is composed of pixels. and each pixel of an RGB image will have three values that encode the intensity of red, green and blue colors.
+* more simplified example imagine we have a 4x4 pixel gray scale image
+    * each pixel represent the intensity: 0 is black and 1 is white
+    * now all pixels are flattened for the first layer: pixel to input
+* all connections are weighted
+    * with this weights the activation function is activated and produces the output
+    * therefore the train objective is to find the best weights
+* these connection weights are called also __network parameters__
+    * real world models have billions of network parameteres or even more
+* pre-trained models good network parameter have been learned already
+    * we download a file with these values and create a model based on it
+
+### convolutional neural networks
+* used in computer vision tasks
+* two most important operations: the convolution operation and the max-pooling operation
+
+## Module 4: Gluon Fundamentals
+* Understand the mathematics behind NDArray
+* Understand when to use different Gluon blocks including convolution, dense layers, and pooling
+* Compose Gluon blocks into complete models
+* Understand the difference between metrics and loss 
+
+### N-dimensional arrays
+* ndarrays also called __tensors__
+* vectors and matrices of N-dimensions
+* used in deep learning to represent input, output, ...
+
+![source: aws training](./gluoncv/ndarray.png)
+

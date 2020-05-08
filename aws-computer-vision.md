@@ -115,3 +115,10 @@ __sources__
 
 ![source: aws training](./gluoncv/ndarray.png)
 
+### NDArray
+* NDArray: MXNet's primary tool for storing and transforming numerical data
+* examples: `ndarray.py, ndarray-operations.py`
+
+### Gluon Blocks
+* how to create a neuronal network using the gluon API of mxnet
+* examples: `gluon-blocks.py`

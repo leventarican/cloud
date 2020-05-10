@@ -121,4 +121,7 @@ __sources__
 
 ### Gluon Blocks
 * how to create a neuronal network using the gluon API of mxnet
-* examples: `gluon-blocks.py`
+    * examples: `gluon-blocks.py, gluon-blocks-init.py`
+* create a sequential block to compose a sequence of layers to create a neural network
+     * examples: `gluon-blocks-sequential.py, gluon-blocks-custom.py`
+* visualize gluon models (blocks) to understand it better

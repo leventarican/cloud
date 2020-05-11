@@ -119,6 +119,7 @@ pip install gluoncv
 * ex. we have a mountain image and our classes are: mountain, beach, forest
     * the model will now give probabilities to each class: mountain 80%, beach 0%, forst 20%
 * GluonCV Models are pre-trained on public available dataset
+
 #### Datasets
 * Datasets for Image Classification
 * __CIFAR-10__ (Canadian Institute for Advanced Research) used over 10 years for computer research. it includes 10 basic classes: cars, cats, dogs, ... and 60000 images. its a small dataset with low resolution images (32x32).
@@ -127,10 +128,10 @@ pip install gluoncv
 #### Models
 * Neuronal Network Models for image classification
 * there are a lot of different models architectures (classification model architectures)
-* __ResNet__ is popular
+    * __ResNet__ is popular
     * ResNet has different variants: ResNet18, ResNet50
-* __MobileNet__ is good for mobile phones
-* or: VGG, SqueezeNet, DenseNet, AlexNet, DarkNet, Inception, ...
+    * __MobileNet__ is good for mobile phones
+    * or: VGG, SqueezeNet, DenseNet, AlexNet, DarkNet, Inception, ...
 * how to decide which model to take? accurary, memory consumption, ...
 * as already wrote, GluonCV implement these model based on the research paper. The GluonCV models are compared to other implementations optimized. The GluonCV version to ResNet-152 is called ResNet-152D.
 
@@ -140,7 +141,38 @@ image-classification.py
 ``` 
 
 ### Object Detection with a pre-trained model
+* understand the content of an image
+* ex. medical image analysis, self driving cars, ...
+* locate object in an image with a box (called bounding box) 
+* additionally the located object is classified from a list of predetermined classes
+* the model will also give a probability for each class
+
+#### Datasets
+* __Pascal VOC__ (Visual Object Class)
+    * 2007 version: 10000 images and 24500 object classes
+    * 2012 version: 11500 images and 27500 object classes
+* __COCO__ (Common Object in Context)
+    * 2017
+    * 123000 images
+    * 886000 objects
+    * 80 object classes: Pascal VOC classes are included. Additionally following categories are more covered: sports, food, household objects (table, tv, computer, ...)
+
+#### Models
+* Object detection model architectures: 
+    * __Faster-RNN__: with ResNet
+        * Faster-RNN is an extension of ResNet with additional components
+        * the network output need coordinates for bounding box, ...
+        * ResNet is called the base network or backbone
+    * __SSD__: with VGG or ResNet or MobilNet
+    * __YOLO__: with Darknet or MobileNet
+
+#### Code Examples
+``` 
+object-detection.py
+``` 
+
 ### Image Segmentation with a pre-trained model
+* see code documentation: `image-segmentation.py`
 
 ### neuronal network essentials
 * module 3 > lesson 5

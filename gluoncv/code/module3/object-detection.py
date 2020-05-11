@@ -2,25 +2,39 @@ import mxnet as mx
 import gluoncv as gcv 
 import matplotlib.pyplot as plt 
 
+################################################################################
+# object detection pipeline
+################################################################################
+
 # prepare image for object-detection network
-# links:
+
 # https://github.com/dmlc/web-data/tree/master/gluoncv/datasets
 # https://gluon-cv.mxnet.io/build/examples_detection/index.html
 
+IMAGE_FILE = 'dog.jpg'
+
 # download image
 ################################################################################
-image_url = 'https://raw.githubusercontent.com/dmlc/web-data/master/gluoncv/datasets/dog.jpg'
-image_filepath = 'dog.jpg'
-gcv.utils.download(url=image_url, path=image_filepath)
+# skip this if already exists
+# image_url = 'https://raw.githubusercontent.com/dmlc/web-data/master/gluoncv/datasets/dog.jpg'
+# gcv.utils.download(url=image_url, path=IMAGE_FILE)
 
 # load image
 ################################################################################
-image = mx.image.imread(image_filepath)
+# load as an MXNet NDArray
+image = mx.image.imread(IMAGE_FILE)
 print('type: ', type(image))
 print('shape: ', image.shape)
 print('data type: ', image.dtype)
 print('minimum value: ', image.min().asscalar())
 print('maximum value: ', image.max().asscalar())
+# type:  <class 'mxnet.ndarray.ndarray.NDArray'>
+# shape:  (576, 768, 3)
+# data type:  <class 'numpy.uint8'>
+# minimum value:  0
+# maximum value:  255
+
+# data layout of this array is HWC
 
 # visualize image
 ################################################################################
@@ -30,7 +44,7 @@ print('maximum value: ', image.max().asscalar())
 # transform and batch
 ################################################################################
 # necessary preprocessing steps for the yolo network is done by the yolo.transform_test function
-# height will be resized to 512 pixels
+# height will be resized to 512 pixels by given the short length of the image
 # chw_image (CHW format) is our resized image
 # format is NCHW not NHWC. transformed from CHW.
 # normalized using the imagenet1k statistics
@@ -39,6 +53,10 @@ print('shape: ', image.shape)
 print('data type: ', image.dtype)
 print('minimum value: ', image.min().asscalar())
 print('maximum value: ', image.max().asscalar())
+# shape:  (1, 3, 512, 683)
+# data type:  <class 'numpy.float32'>
+# minimum value:  -2.117904
+# maximum value:  2.64
 
 # now to prediction and overlay the detected objects onto the image
 
@@ -63,9 +81,9 @@ for index, array in enumerate(prediction):
 #3 shape: (1, 100, 4)
 
 # how to interprete the output?
-# 1: object class indexes
-# 2: object class probabilities
-# 3: object bounding box coordinates
+# 1. array: object class indexes
+# 2. array: object class probabilities
+# 3. array: object bounding box coordinates
 
 # 1: we have 1 image, 100 potential objects and 1 class index per object
 # 3: we have 1 image, 100 potential objects and 4 values for each object to define the bounding box
@@ -98,6 +116,9 @@ print(class_indicies[:k])
 #  [-1.]
 #  [-1.]]
 # <NDArray 10x1 @cpu(0)>
+
+print(network.classes)
+# ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch', 'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush']
 
 # how to interprete this?
 # -1 is a special class index for _no object detected_

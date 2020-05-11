@@ -15,7 +15,7 @@ when use image segmentation?
 * image segmentation try to predict the exact boundary of a class
 * ex. use for satellite image analysis
 
-image we have an image with trees, house, earth
+imagine we have an image with trees, house, earth
 so we will have three classes: trees, house, earth
 
 ## semantic image segmentation
@@ -79,11 +79,16 @@ print('shape: ', image.shape)
 print('data type: ', image.dtype)
 print('minimum value: ', image.min().asscalar())
 print('maximum value: ', image.max().asscalar())
+# type:  <class 'mxnet.ndarray.ndarray.NDArray'>
+# shape:  (576, 768, 3)
+# data type:  <class 'numpy.uint8'>
+# minimum value:  0
+# maximum value:  255
 
 # visualize image
 ################################################################################
-# plt.imshow(image.asnumpy())
-# plt.show()
+plt.imshow(image.asnumpy())
+plt.show()
 
 # transform and batch
 ################################################################################
@@ -91,19 +96,24 @@ transform = '''
 we need to create our transformation from scratch.
 there is no preset transformation for the dataset or the model we are use.
 
-we can compose multiple transforms into a (mxnet) single transform function: 
+we can compose multiple transform steps into a single transform function: 
 * transform #1: ToTensor
     * the data layer will be converted from HWC to CHW
     * data type will be converted from uint8 to float32
 * transtorm #2: Normalize
     * normalize the values of the image by using the imagenet1k statistics
+    * see also Keras impl: https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L123-L124
+    * usually three different normalizing methods are used: 
+        * normalizing the pixel values between 0 and 1
+        * normalizing the pixel values between -1 and 1
+        * normalizing according to the dataset mean & standard deviation (what we are using now)
 '''
 print(transform)
 
 from mxnet.gluon.data.vision import transforms
 transforms_fn = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Normalize([.485, 456, .406], [.229, .224, .225])
+    transforms.Normalize([.485, .456, .406], [.229, .224, .225])
 ])
 
 image = transforms_fn(image)
@@ -112,6 +122,11 @@ print('shape: ', image.shape)
 print('data type: ', image.dtype)
 print('minimum value: ', image.min().asscalar())
 print('maximum value: ', image.max().asscalar())
+# type:  <class 'mxnet.ndarray.ndarray.NDArray'>
+# shape:  (3, 576, 768)
+# data type:  <class 'numpy.float32'>
+# minimum value:  -2035.7142
+# maximum value:  2.64
 
 batch = '''
 create a batch from a single image
@@ -120,7 +135,7 @@ add an extra dimension to the beginning of our image
 print(batch)
 image = image.expand_dims(0)
 print(image.shape)
-
+# (1, 3, 576, 768)
 
 # load model (from zoo)
 ################################################################################
@@ -160,9 +175,10 @@ print(output.shape)
 px_height, px_width = 300, 500
 # layout is CHW. lets slice
 px_logit = output[:, px_height, px_width]
+print('#############')
 # now use softmax function to convert logits to probabilities
 px_probability = mx.nd.softmax(px_logit)
-px_round_probability = mx.nd.round(px_probability*100)/100
+px_round_probability = mx.nd.round(px_probability*100)
 print(px_round_probability)
 
 # use argmax function find the most likely class for the pixel
@@ -188,8 +204,10 @@ output_heatmap = output_proba[2]
 # plt.imshow(output_heatmap.asnumpy())
 # plt.show()
 
-# visualize most likely class
 prediction = mx.nd.argmax(output, 0).asnumpy()
+# print(prediction)
+
+# visualize most likely class
 from gluoncv.utils.viz import get_color_pallete
 prediction_image = get_color_pallete(prediction, 'ade20k')
 plt.imshow(prediction_image)

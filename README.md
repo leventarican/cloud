@@ -1,37 +1,5 @@
 # cloud
 
-## GluonCV
-
-### setup environment
-* example for ubuntu
-* in order to work on a clean independent environment we'll use a virtual environment
-* then we install mxnet and gluoncv
-
-1. create virtual environment: only once
-``` 
-python3 -m venv gluoncv
-``` 
-2. activate virtual environment
-``` 
-cd gluoncv
-source bin/activate
-``` 
-3.  deactivate virtual environment
-``` 
-deactivate
-``` 
-4. install mxnet
-``` 
-pip install mxnet
-``` 
-5. install gluoncv
-``` 
-pip install gluoncv
-``` 
-
-### test the setup
-* you already activated your environment? then just run `python3 hello.py` 
-
 ## IBM Cloud
 * free lite account 
 * _Lite accounts don't have an expiration date, don't require a credit card and provide limited access to a catalog of more than 40 services_ 

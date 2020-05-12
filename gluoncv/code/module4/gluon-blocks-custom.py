@@ -6,8 +6,9 @@ from mxnet.gluon import nn
 # ojective: create more complex data flow
 ################################################################################
 
-## MLP
+## MLP: Multi Layer Percepton
 # https://gluon.mxnet.io/chapter03_deep-neural-networks/mlp-gluon.html
+# MLP inherits / extends the Block class
 class MLP(nn.Block):
     def __init__(self, hidden_units=256, **kwargs):
         super(MLP, self).__init__(**kwargs)
@@ -23,6 +24,7 @@ net.initialize()
 net(nd.random.uniform(shape=(1,64)))
 
 ## Siamese Network
+# good architecture for comparing two images
 class SiameseNetwork(nn.Block):
     def __init__(self, hidden_units=256, **kwargs):
         super(SiameseNetwork, self).__init__(**kwargs)

@@ -174,26 +174,47 @@ object-detection.py
 ### Image Segmentation with a pre-trained model
 * see code documentation: `image-segmentation.py`
 
-### neuronal network essentials
-* module 3 > lesson 5
+### Neural Network Essentials
+* the pre-trained models are based of components called Neural Networks especially __Convolutional Neural Networks__
+
+#### Fully Connected Network
 * a fundamental network is called the __fully connected network__
 * is called fully connected because all inputs are connected to outputs
 * its a general purpose network that makes no assumption about the input data
-* ex. image. an image is composed of pixels. and each pixel of an RGB image will have three values that encode the intensity of red, green and blue colors.
-* more simplified example imagine we have a 4x4 pixel gray scale image
+* the network begins from 0. it has no special information from the image and has to _re-learn_ the relationship between  the pixels
+
+![source: aws training](./gluoncv/fully-connected-network.png)
+* example of a fully connected network with 4 inputs with 3 fully connected layers
+* the 4 inputs can correspond to 4 pixels (if we have a 2x2 image)
+* we have 3 outputs (with predictions) because of 3 classes
+* an image is composed of pixels. and each pixel of an RGB image will have three values that encode the intensity of red, green and blue colors.
+* more simplified example. we have a gray scale image
     * each pixel represent the intensity: 0 is black and 1 is white
     * now all pixels are flattened for the first layer: pixel to input
 * all connections are weighted
     * with this weights the activation function is activated and produces the output
+    * with a activation function like __Sigmoid function__ the network has the ability to _learn_
     * therefore the train objective is to find the best weights
 * these connection weights are called also __network parameters__
     * real world models have billions of network parameteres or even more
-* pre-trained models good network parameter have been learned already
+* pre-trained models have already good network parameter that have been learned already
     * we download a file with these values and create a model based on it
 
-#### convolutional neural networks
+#### Convolutional networks
 * used in computer vision tasks
+* _Convolutional neural networks learn local patterns from small neighborhoods of pixels, unlike fully connected networks that learned patterns across all pixels of the image._
 * two most important operations: the convolution operation and the max-pooling operation
+* a component of the convolution operation is the __kernel or filter__
+* the input goes through this kernel and generate an output to learn pattern or extract features 
+* you can achive by this operation: edge feature extraction, or blur image, sharpen
+* with deep learning we learn the parameter for the best suited kernel values
+* max pooling reduces the dimension by getting the max value of a defined kernel ex. 2x2 (4 input values) the output will be 1 value
+
+__what is a feature?__
+
+* the number of features is equal to number of nodes in the input layer
+* if we want to classify man or woman then the attributes (height, hair length, ...) of them are the features
+* if we want to classify images (cat / dog) then our features = inputs. the next layer can then do __features extraction__ like cat ears vs dog ears, ...
 
 ## Module 4: Gluon Fundamentals
 * Understand the mathematics behind NDArray
@@ -219,5 +240,7 @@ object-detection.py
      * examples: `gluon-blocks-sequential.py, gluon-blocks-custom.py`
 * visualize gluon models (blocks) to understand it better
 
-## sources
+## Sources, Links
 * cloudera: AWS Computer Vision: Getting Started with GluonCV
+* a good intro into 2D Convolutions with mxnet: https://medium.com/apache-mxnet/convolutions-explained-with-ms-excel-465d6649831c
+* good slides about GluonCV: https://github.com/dmlc/web-data/blob/master/gluoncv/slides/Classification.pdf

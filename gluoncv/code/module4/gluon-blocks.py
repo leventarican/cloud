@@ -8,14 +8,14 @@ import matplotlib.pyplot as plt
 # this code show three building blocks: 3D convolution, max pooling and dense layer
 ################################################################################
 
-# 2D convolution
+# building block: 2D convolution
 ################################################################################
 # create a  conditional layer
 # activation function: ReLU or Rectified Linear Units 
 layer = nn.Conv2D(
-    channels=1,
+    channels=1, # how many output channels this network should have. in this case only 1 kernel applied.
     kernel_size=(3,3),
-    in_channels=1,
+    in_channels=1,  # this input channel is optional because it can be inferred automatically
     strides=(1,1),
     padding=(0,0),
     activation='relu',
@@ -39,7 +39,7 @@ output = layer(image_batchified)
 # plt.imshow(output.squeeze().asnumpy(), cmap='gray')
 # plt.show()
 
-# max pooling
+# building block: max pooling
 ################################################################################
 layer = nn.MaxPool2D(pool_size=(4,4))
 print(layer)
@@ -47,15 +47,15 @@ print(layer)
 
 pooled = layer(output)
 
-# plt.imshow(output.squeeze().asnumpy(), cmap='gray')
-# plt.axis('off')
-# plt.show()
+plt.imshow(output.squeeze().asnumpy(), cmap='gray')
+plt.axis('off')
+plt.show()
 
-# plt.imshow(pooled.squeeze().asnumpy(), cmap='gray')
-# plt.axis('off')
-# plt.show()
+plt.imshow(pooled.squeeze().asnumpy(), cmap='gray')
+plt.axis('off')
+plt.show()
 
-# fully connected layer
+# building block: dense layer / fully connected layer
 ################################################################################
 # also called: dense layer
 # with 3 inputs and 10 outputs

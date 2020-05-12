@@ -7,7 +7,7 @@ from mxnet.gluon import nn
 # this give us a way to stack layers
 net = nn.Sequential()
 
-# LeNet architecture: compose a simple
+# compose a simple LeNet architecture
 ################################################################################
 net.add(
     # 6 channels by 5x5 kernel
@@ -44,4 +44,3 @@ net.forward(nd.ones((1,1,28,28)))
 ################################################################################
 # good for image classification
 # data flow is here more complicated
-

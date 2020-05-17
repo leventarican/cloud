@@ -44,3 +44,13 @@ print(matrix)
 # convert numpy to mxnet ndarray
 matrix = nd.array(matrix)
 print(matrix)
+
+# calculate the average intensity for every pixel
+matrix = nd.random.randint(low=0, high=255, shape=(1, 3, 3))
+print(matrix)
+flat = nd.flatten(matrix)
+flat = flat[0]
+print(flat.shape)
+
+a = np.array([[1,2,3,4],[5,6,7,8]])
+a = np.ndarray.flatten(a)

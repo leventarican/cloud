@@ -9,7 +9,7 @@
 # 
 # We start with a number of required imports and set the data paths.
 
-# In[ ]:
+# In[3]:
 
 
 from matplotlib import pyplot as plt
@@ -22,7 +22,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 
-# In[ ]:
+# In[4]:
 
 
 M4_DATA = Path(os.getenv('DATA_DIR', '../../data'), 'module_4')
@@ -34,13 +34,13 @@ M4_MODELS = Path(M4_DATA, 'models')
 # 
 # We'll use the in-built dataset called `FashionMNIST` which is a variant of the commonly used `MNIST` dataset. It consists of 60,000 training images and 10,000 test images, and each image is a 28px by 28px greyscale image. We'll start by creating the `dataset` and visualize an example image.
 
-# In[ ]:
+# In[5]:
 
 
 test_dataset = FashionMNIST(train=False, root=M4_IMAGES).transform_first(transforms.ToTensor())
 
 
-# In[ ]:
+# In[6]:
 
 
 sample_idx = 123
@@ -54,7 +54,7 @@ plt.imshow(sample_data[0].asnumpy())  # 0 for first and only channel (since grey
 # 
 # One of the first steps in the pixelwise approach is to calculate an 'average image' from the dataset. Using a sample of 1024 images, you should now implement a function to calculate the average intensity for every pixel. You'd typically want to calculate this from all samples of the dataset, but 1024 samples will be sufficient for now.
 
-# In[ ]:
+# In[7]:
 
 
 test_dataloader = mx.gluon.data.DataLoader(test_dataset, shuffle=False, batch_size=1024)
@@ -63,7 +63,7 @@ for data, label in test_dataloader:
 print(data.shape)
 
 
-# In[ ]:
+# In[8]:
 
 
 def get_average_image_from_batch(batch):
@@ -77,10 +77,15 @@ def get_average_image_from_batch(batch):
     :rtype: mx.nd.NDArray
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    
+    M = mx.ndarray.mean(batch, axis=(0))
+    print(M.shape)
+    
+    return M
+    #raise NotImplementedError()
 
 
-# In[ ]:
+# In[9]:
 
 
 average_image = get_average_image_from_batch(data)
@@ -90,7 +95,7 @@ plt.imshow(average_image[0].asnumpy())  # 0 for first and only channel (since gr
 
 # Using the average image that was calculated above, you should now implement a function to perform the pixelwise normalization.
 
-# In[ ]:
+# In[10]:
 
 
 def subtract_average_image(sample, average_image):
@@ -107,10 +112,16 @@ def subtract_average_image(sample, average_image):
     :rtype: mx.nd.NDArray
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    
+    print(sample.shape)
+    print(average_image.shape)
+    
+    return sample_data - average_image
+    
+    # raise NotImplementedError()
 
 
-# In[ ]:
+# In[11]:
 
 
 normalized_sample_data = subtract_average_image(sample_data, average_image)
@@ -125,7 +136,7 @@ plt.imshow(normalized_sample_data[0].asnumpy())  # 0 for first and only channel 
 # 
 # **Hint**: Check out the `axis` (or `dim`) arguments on MXNet NDArray functions.
 
-# In[ ]:
+# In[12]:
 
 
 def get_channel_average_from_batch(batch):
@@ -140,10 +151,16 @@ def get_channel_average_from_batch(batch):
     :rtype: mx.nd.NDArray
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    
+    M = mx.ndarray.mean(batch, axis=(0, 1, 2, 3))
+    if (len(batch[0]) > 1):
+        M = mx.ndarray.mean(batch[0], axis=(1, 2))
+    return M
+    
+    # raise NotImplementedError()
 
 
-# In[ ]:
+# In[13]:
 
 
 channel_average = get_channel_average_from_batch(data).asscalar()
@@ -159,7 +176,7 @@ np.testing.assert_array_almost_equal(test_averages.asnumpy(), test_channel_avera
 
 # Using this channel average, we can use the `Normalize` transform to apply this to all samples in our dataset as they are loaded.
 
-# In[ ]:
+# In[14]:
 
 
 channel_std = 0.31
@@ -169,7 +186,7 @@ transform = transforms.Compose([
 ])
 
 
-# In[ ]:
+# In[15]:
 
 
 train_dataset = FashionMNIST(train=True, root=M4_IMAGES).transform_first(transform)
@@ -184,7 +201,7 @@ test_dataloader = mx.gluon.data.DataLoader(train_dataset, shuffle=False, batch_s
 # 
 # **Hint**: You'll find classes in the `mxnet.metric` subpackage useful for this task.
 
-# In[ ]:
+# In[18]:
 
 
 def calculate_accuracy(network, dataloader):
@@ -200,15 +217,19 @@ def calculate_accuracy(network, dataloader):
     :rtype: mx.metric.EvalMetric
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    
+    accuracy = mx.metric.Accuracy()
+    
     for data, labels in tqdm(dataloader):
         preds = network(data)
         # YOUR CODE HERE
-        raise NotImplementedError()
+        #raise NotImplementedError()
+        accuracy.update(labels, preds)
     return accuracy
 
 
-# In[ ]:
+# In[19]:
 
 
 test_network = mx.gluon.nn.Dense(units=10)
@@ -224,7 +245,7 @@ assert metric.num_inst == 60000
 
 # In the section, you'll implement a couple of different image classification networks and train then on the `FashionMNIST` dataset. A `train` function is already provided in this assignment, because the focus will be on network construction.
 
-# In[ ]:
+# In[20]:
 
 
 def train(network, dataloader):
@@ -242,14 +263,27 @@ def train(network, dataloader):
 # 
 # **Hint**: You'll find classes in the `mxnet.gluon.nn` subpackage useful for this task.
 
-# In[ ]:
+# In[22]:
 
 
 # YOUR CODE HERE
-raise NotImplementedError()
+# raise NotImplementedError()
+
+network = mx.gluon.nn.Sequential()
+
+# first model is a sequential network with 3 layers
+# first layer should have 16 hidden units
+# second should have 8 hidden units 
+# last layer should the correct number of output units for the classification task at hand.
+# add ReLU activations on all hidden layers, but not the output layer.
+network.add(
+    mx.gluon.nn.Dense(16, activation='relu'),
+    mx.gluon.nn.Dense(8, activation='relu'),
+    mx.gluon.nn.Dense(10)
+)
 
 
-# In[ ]:
+# In[23]:
 
 
 assert isinstance(network, mx.gluon.nn.Sequential)
@@ -269,15 +303,18 @@ assert network[2].weight.shape[0] == 10
 # 
 # **Hint**: You'll find classes in the `mxnet.init` subpackage useful for this task.
 
-# In[ ]:
+# In[24]:
 
 
 # YOUR CODE HERE
-raise NotImplementedError()
+# raise NotImplementedError()
+
+initializer = mx.init.Xavier()
+
 network.initialize(initializer)
 
 
-# In[ ]:
+# In[25]:
 
 
 assert isinstance(initializer, mx.initializer.Xavier)
@@ -309,14 +346,24 @@ print(metric.get())
 # 4. Max Pooling Layer (2x2 kernel and 2x2 stride)
 # 5. Dense Layer (10 output units)
 
-# In[ ]:
+# In[26]:
 
 
 # YOUR CODE HERE
-raise NotImplementedError()
+# raise NotImplementedError()
+
+network = mx.gluon.nn.Sequential()
+network.add(
+    mx.gluon.nn.Conv2D(32, (3,3), activation='relu'),
+    mx.gluon.nn.MaxPool2D((2,2), strides=(2,2)),
+    mx.gluon.nn.Conv2D(16, (3,3), activation='relu'),
+    mx.gluon.nn.MaxPool2D((2,2), strides=(2,2)),
+    mx.gluon.nn.Dense(10)
+    
+)
 
 
-# In[ ]:
+# In[27]:
 
 
 assert isinstance(network, mx.gluon.nn.Sequential)
@@ -338,7 +385,7 @@ assert network[4].weight.shape[0] == 10
 # 
 # With 8954 trainable parameters, this network's got 30% fewer parameters than the previous network.
 
-# In[ ]:
+# In[28]:
 
 
 network.initialize(init=initializer)
@@ -347,7 +394,7 @@ network.summary(data)
 
 # And finally, let's evaluate the network performance.
 
-# In[ ]:
+# In[29]:
 
 
 train(network, train_dataloader)

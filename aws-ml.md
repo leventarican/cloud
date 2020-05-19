@@ -34,5 +34,14 @@
 * we are looking for continous values such as number: _1, 2, 3, ..._
 * ex. predict the price of a product
 
+## multiclass problem 
+* more then two classes
+
+_The machine learning model's job during training is to learn which of these features are actually important to make the right prediction for the future. _
+
+_If the value you're looking for is know, like in a supervised learning, then that prediction is called a label. But if the value isn't known, like in unsupervised learning, then it's called a target._
+
+
+
 # Sources, Links
 * coursera: Getting Started with AWS Machine Learning

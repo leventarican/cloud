@@ -5,7 +5,7 @@
 # 
 # This lesson covered the import data concepts in deep learning models and the corresponding programming APIs in MXNet Gluon that we use when training these models. In particular, you learned how to define gluon `Datasets`, how to transform and preprocess those datasets with `vision.transforms` and how to feed the datasets into neural networks during training with gluon `DataLoaders`. This practice assessment will allow you to become familiar with these tools in preparation for building your first end to end deep learning training system in the next lesson.
 
-# In[ ]:
+# In[3]:
 
 
 from mxnet import gluon
@@ -15,7 +15,7 @@ import os
 from pathlib import Path
 
 
-# In[ ]:
+# In[4]:
 
 
 M5_DATA = Path(os.getenv('DATA_DIR', '../../data'), 'module_5')
@@ -34,7 +34,7 @@ M5_MODELS = Path(M5_DATA, 'models')
 # 
 # <font color='red'>**CAUTION!**</font>: Although the notebook interface has internet connectivity, the **autograders are not permitted to access the internet**. We have already downloaded the correct models and data for you to use so you don't need access to the internet. Set the `root` parameter to `M5_IMAGES` when using a preset dataset. Usually, in the real world, you have internet access, so setting the `root` parameter isn't required (and it's set to `~/.mxnet` by default).
 
-# In[ ]:
+# In[5]:
 
 
 def get_cifar10_dataset():
@@ -47,17 +47,26 @@ def get_cifar10_dataset():
     train_data = None
     val_data = None
     train_indices = {}
-    val_indicies = {}
+    val_indices = {}
     
     # Use `root=M5_IMAGES` for your dataset
     
+    train_data = gluon.data.vision.datasets.CIFAR10(root=M5_IMAGES, train=True)
+    val_data = gluon.data.vision.datasets.CIFAR10(root=M5_IMAGES, train=False)
+    
+    # class is in index 1
+    for i in range(50000):
+        train_indices[train_data[i][1]] = i
+    for i in range(10000):
+        val_indices[val_data[i][1]] = i
+
     # YOUR CODE HERE
-    raise NotImplementedError()
+    #raise NotImplementedError()
     
     return train_data, train_indices, val_data, val_indices
 
 
-# In[ ]:
+# In[6]:
 
 
 _, _, v, i = get_cifar10_dataset()
@@ -69,7 +78,7 @@ for k in range(10):
 
 # Now we can visualize what classes are present in the CIFAR10 dataset. If your implementation for `get_cifar_10` dataset is correct, the code cell below should plot two rows of images. Take a look at the first row, do you recognize some of the classes there? Compare images from the same class labels in the first row to the second row. Do the validation images look like they belong to the same class?
 
-# In[ ]:
+# In[7]:
 
 
 def plot_cifar10_classes(train_data, train_indices, val_data, val_indices):
@@ -102,10 +111,13 @@ plot_cifar10_classes(*get_cifar10_dataset())
 # 
 # Implement both functions below and execute the cell before moving on.
 
-# In[ ]:
+# In[16]:
 
 
 from mxnet.gluon.data.vision import transforms
+#import gluoncv
+
+# use RandomResizedCrop (module mxnet gluon) instead of RandomCrop in gluoncv module
 
 def transform_cifar10_dataset_train():
     """
@@ -115,8 +127,19 @@ def transform_cifar10_dataset_train():
     :rtype: gluon.Block
     """
     
+    train_data = gluon.data.vision.datasets.CIFAR10(root=M5_IMAGES, train=True)    
+    
+    # RandomFlipLeftRight
+    # RandomCrop to size 16 x 16
+    
+    transform = transforms.Compose(
+        [transforms.RandomFlipLeftRight(), transforms.RandomResizedCrop(16)]
+    )
+    
+    return transform
+    
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
 
 def transform_cifar10_dataset_val():
     """
@@ -126,11 +149,17 @@ def transform_cifar10_dataset_val():
     :rtype: gluon.Block
     """
     
+    val_data = gluon.data.vision.datasets.CIFAR10(root=M5_IMAGES, train=False)
+    
+    transform = transforms.CenterCrop(size=(16, 16))
+    
+    return transform
+    
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
 
 
-# In[ ]:
+# In[17]:
 
 
 assert isinstance(transform_cifar10_dataset_train(), transforms.Compose)
@@ -144,7 +173,7 @@ assert isinstance(transform_cifar10_dataset_train()[1], transforms.RandomResized
 # 
 # However, now the images should be a bit more pixelated due to the cropping. Can you still recognize the objects in the images. Can you identify which images have been flipped and which haven't? It might help to compare to the previous visualizations.
 
-# In[ ]:
+# In[18]:
 
 
 def plot_transformed_cifar_10_classes(train_data, train_indices, val_data, val_indices, train_transform, val_transform):
@@ -160,7 +189,7 @@ plot_transformed_cifar_10_classes(*get_cifar10_dataset(), transform_cifar10_data
 # 
 # Finally, you will implement a function that takes in a dataset, a transform function and `batch_size` and returns a `gluon.data.DataLoader`. Similar to Question 2, you will implement two versions of this function - one to generate the training dataloader and the other to generate the test dataloader. Make sure that training dataloader shuffles the training dataset but the validation dataset should not shuffle the validation dataset. Once you have completed the function implementations move on to the next cell to visualize how the dataloader would function during model training.
 
-# In[ ]:
+# In[21]:
 
 
 def get_train_dataloader(train_dataset, train_transform, batch_size):
@@ -181,7 +210,11 @@ def get_train_dataloader(train_dataset, train_transform, batch_size):
     """
     
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    
+    # with shuffle
+    train_dataloader = gluon.data.DataLoader(train_dataset.transform_first(train_transform), batch_size=batch_size, shuffle=True)
+    return train_dataloader
     
 def get_val_dataloader(val_dataset, val_transform, batch_size):
     """
@@ -201,10 +234,15 @@ def get_val_dataloader(val_dataset, val_transform, batch_size):
     """
     
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    
+    # without shuffle
+    val_dataloader = gluon.data.DataLoader(val_dataset.transform_first(val_transform), batch_size=batch_size, shuffle=False)
+    return val_dataloader
+    
 
 
-# In[ ]:
+# In[22]:
 
 
 batch_size = 128
@@ -261,4 +299,10 @@ train_set, _, val_set, _ = get_cifar10_dataset()
 train_dataloader = get_train_dataloader(train_set, transform_cifar10_dataset_train(), batch_size)
 val_dataloader = get_val_dataloader(val_set, transform_cifar10_dataset_val(), batch_size)
 plot_cifar10_dataloading(train_dataloader, val_dataloader, batch_size)
+
+
+# In[ ]:
+
+
+
 

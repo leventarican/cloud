@@ -67,5 +67,7 @@ transform_fn = transforms.Compose(
 
 train_dataset = gluon.data.vision.datasets.MNIST(train=True).transform(transform_fn)
 
+print(type(train_dataset))
+
 # transformation can also be used an data augmentation: resize, centercrop, ...
 ################################################################################

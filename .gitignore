@@ -5,5 +5,5 @@ gluoncv/lib64
 gluoncv/share
 gluoncv/pyvenv.cfg
 
-gluoncv/code/module5/module5-assignment.pdf
+gluoncv/code/module5/*.pdf
 gluoncv/code/module5/trained_net.params

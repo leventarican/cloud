@@ -9,7 +9,7 @@
 
 # ### 0) Setup
 
-# In[ ]:
+# In[1]:
 
 
 import mxnet as mx
@@ -27,7 +27,7 @@ from pathlib import Path
 rcParams['figure.figsize'] = 5, 10
 
 
-# In[ ]:
+# In[2]:
 
 
 M6_DATA = Path(os.getenv('DATA_DIR', '../../data'), 'module_6')
@@ -39,7 +39,7 @@ M6_MODELS = Path(M6_DATA, 'models')
 # 
 # GluonCV has a wide range pre-trained models so selecting the correct model for the task at hand can be tricky. As you can see below there are close to 200 different pre-trained model variants. You first task will be to select a good model given a few constraints.
 
-# In[ ]:
+# In[3]:
 
 
 for model in gcv.model_zoo.get_model_list():
@@ -48,7 +48,7 @@ for model in gcv.model_zoo.get_model_list():
 
 # Our objective is to count people so certain types of model are better suited for this task than others. We also want a resource efficient model so let's say that the selected model must consume <1GB of memory. And lastly our model must be fast and be able to process >100 images per second on the [GluonCV website](https://gluon-cv.mxnet.io/model_zoo) benchmarks. Given these criteria, you first task is to select the most appropriate model for the task from the following list.
 
-# In[ ]:
+# In[4]:
 
 
 model_options = ['senet_154',
@@ -60,10 +60,12 @@ model_options = ['senet_154',
 
 # set the variable `selected_model`
 # YOUR CODE HERE
-raise NotImplementedError()
+# raise NotImplementedError()
+
+selected_model = model_options[3]
 
 
-# In[ ]:
+# In[5]:
 
 
 assert selected_model in set(model_options), 'You must choose from model_options'
@@ -71,7 +73,7 @@ assert hashlib.sha1(selected_model.encode('utf-8')).hexdigest()[:8] in ['9c7846f
 assert hashlib.sha1(selected_model.encode('utf-8')).hexdigest()[:8] == '1e6e3a3d', 'You should choose a faster object detection model.'
 
 
-# In[ ]:
+# In[6]:
 
 
 network = gcv.model_zoo.get_model(selected_model, pretrained=True, root=M6_MODELS)
@@ -85,7 +87,7 @@ network = gcv.model_zoo.get_model(selected_model, pretrained=True, root=M6_MODEL
 # 
 # **Hint**: you can reference your solution from Assignment 3.
 
-# In[ ]:
+# In[7]:
 
 
 def load_image(filepath):
@@ -99,10 +101,14 @@ def load_image(filepath):
     :rtype: mx.nd.NDArray
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    
+    print(filepath)
+    image = mx.image.imread(filepath)
+    return image
 
 
-# In[ ]:
+# In[8]:
 
 
 test_filepath = Path(M6_IMAGES, '32742378405_3ecc8cc958_b.jpg')
@@ -112,7 +118,7 @@ assert test_output.dtype == np.uint8  # 0 - 255
 assert isinstance(test_output, mx.nd.NDArray)  # MXNet NDArray, not NumPy Array.
 
 
-# In[ ]:
+# In[9]:
 
 
 plt.imshow(test_output.asnumpy())
@@ -129,7 +135,7 @@ plt.show()
 # 
 # See the docstring for more details, but don't forget that GluonCV contains a number of utilities and helper functions to make your life easier! Check out the presets transforms.
 
-# In[ ]:
+# In[10]:
 
 
 def transform_image(array):
@@ -149,10 +155,13 @@ def transform_image(array):
     :rtype: tuple of (mx.nd.NDArray, numpy.ndarray)
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    
+    image, chw_image = gcv.data.transforms.presets.yolo.transform_test(array, short=416)
+    return image, chw_image
 
 
-# In[ ]:
+# In[11]:
 
 
 norm_image, unnorm_image = transform_image(test_output)
@@ -162,7 +171,7 @@ assert unnorm_image.shape == (416, 625, 3)
 assert unnorm_image.dtype == np.uint8
 
 
-# In[ ]:
+# In[12]:
 
 
 plt.imshow(unnorm_image)
@@ -179,7 +188,7 @@ plt.show()
 # 
 # **Hint**: Don't forget that you're typically working with a batch of images, even when you only have one image.
 
-# In[ ]:
+# In[13]:
 
 
 def detect(network, data):
@@ -195,11 +204,20 @@ def detect(network, data):
     :rtype: tuple of mx.nd.NDArrays
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    
+    prediction = network(data)
+    
+    class_ids, scores, bounding_boxes = prediction
+    
+    print(class_ids.shape)
+    print(scores.shape)
+    print(bounding_boxes.shape)
+    
     return class_ids, scores, bounding_boxes
 
 
-# In[ ]:
+# In[14]:
 
 
 class_ids, scores, bounding_boxes = detect(network, norm_image)
@@ -208,7 +226,7 @@ assert scores.shape == (1, 100, 1)
 assert bounding_boxes.shape == (1, 100, 4)
 
 
-# In[ ]:
+# In[15]:
 
 
 ax = utils.viz.plot_bbox(unnorm_image, bounding_boxes[0], scores[0], class_ids[0], class_names=network.classes)
@@ -235,7 +253,7 @@ plt.show()
 # 
 # **Hint**: Your function should return a Python float so conversion from MXNet NDArray to Python float is required.
 
-# In[ ]:
+# In[16]:
 
 
 def count_object(network, class_ids, scores, bounding_boxes, object_label, threshold=0.75):
@@ -259,11 +277,37 @@ def count_object(network, class_ids, scores, bounding_boxes, object_label, thres
     :rtype: int
     """
     # YOUR CODE HERE
-    raise NotImplementedError()
+    # raise NotImplementedError()
+    
+    # network, 
+    # class_ids, scores, bounding_boxes
+    # object_label
+    
+    scores = scores[0]
+    class_ids = class_ids[0]
+    print(class_ids.shape)
+    print(class_ids[10].astype('int').asscalar())
+    
+    num_people = 0
+    
+    print(f'threshold: {threshold}')
+    
+    for i, s in enumerate(scores):
+        score = s.asscalar()
+        # print(f'score: {score}')
+        if (score >= threshold):
+            print(f'score > threshold: {score}; {threshold}')
+            c = class_ids[i].astype('int').asscalar()
+            c = network.classes[c] 
+            print(f'class: {c}')
+            if (c == object_label):
+                print(c)
+                num_people += 1
+    
     return num_people
 
 
-# In[ ]:
+# In[17]:
 
 
 for object_label in ["person", "sports ball"]:
@@ -271,14 +315,14 @@ for object_label in ["person", "sports ball"]:
     print("{} objects of class '{}' detected".format(count, object_label))
 
 
-# In[ ]:
+# In[18]:
 
 
 num_people = count_object(network, class_ids, scores, bounding_boxes, "person")
 assert num_people == 6
 
 
-# In[ ]:
+# In[19]:
 
 
 thresholds = [0, 0.5, 0.75, 0.9, 0.99, 0.999]
@@ -293,7 +337,7 @@ for threshold in thresholds:
 # 
 # In this section, you should stack all of the previously defined functions together and complete the implementation of the  `count` method to return the total number of people in an image. Use the `_network` and `_threshold` from `__init__`.
 
-# In[ ]:
+# In[22]:
 
 
 class PersonCounter():
@@ -306,11 +350,18 @@ class PersonCounter():
         
     def count(self, filepath, visualize=False):
         # YOUR CODE HERE
-        raise NotImplementedError()
+        # raise NotImplementedError()
+        
+        image = load_image(filepath)
+        image, unnorm_image = transform_image(image)
+        class_ids, scores, bounding_boxes = detect(network, image)
+        num_people = count_object(network, class_ids, scores, bounding_boxes, object_label='person', threshold=self._threshold)
+        
         if visualize:
             self._visualize(unnorm_image, class_ids, scores, bounding_boxes)
         # YOUR CODE HERE
-        raise NotImplementedError()
+        # raise NotImplementedError()
+        
         if num_people == 1:
             print('{} person detected in {}.'.format(num_people, filepath)) 
         else:
@@ -333,7 +384,7 @@ class PersonCounter():
         plt.show()
 
 
-# In[ ]:
+# In[23]:
 
 
 counter = PersonCounter(threshold=0.9)
@@ -352,7 +403,7 @@ assert counter.count(Path(M6_IMAGES, '25751294956_fa3ee87fb8_b.jpg'), visualize=
 # 
 # See if you can find more failure cases.
 
-# In[ ]:
+# In[24]:
 
 
 counter.count(Path(M6_IMAGES, '18611133536_534285f26d_b.jpg'), visualize=True)
@@ -362,7 +413,7 @@ counter.count(Path(M6_IMAGES, '18611133536_534285f26d_b.jpg'), visualize=True)
 
 # With our person counter implemented, let's run through the whole dataset and count the number of people in our image directory.
 
-# In[ ]:
+# In[25]:
 
 
 total_count = 0
